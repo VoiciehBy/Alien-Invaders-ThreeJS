@@ -1,4 +1,4 @@
-<HTML>
+<!DOCTYPE HTML>
 
 <HEAD>
     <title> Alien Invaders in 3D - Prototype by Wojciech R. Białek</title>
@@ -11,9 +11,8 @@
 </HEAD>
 
 <BODY>
-    <script src="js/three.js"></script>
-    <script src="js/OrbitControls.js"></script>
-    <script src="js/KeyboardState.js"></script>
+    <script src="https://stemkoski.github.io/Three.js/js/Three.js"></script>
+    <script src="https://stemkoski.github.io/Three.js/js/KeyboardState.js"></script>
     <script>
         //CONSTANTS 
         var offsetXBetweenAliens = 75;
@@ -37,11 +36,12 @@
         yACamera.lookAt(yAScene.position);
         var yARenderer = new THREE.WebGLRenderer({ antialias: true });//new Scene initialization,turning on antiliasing
         var yAKeyboard = new KeyboardState();
-        var yAControls = new THREE.OrbitControls(yACamera, yARenderer.domElement);
+        //var yAControls = new THREE.OrbitControls(yACamera, yARenderer.domElement);
 
         //MATERIALS
         //Loading and Wraping texture
-        var yASkyboxTexture = THREE.ImageUtils.loadTexture('img/fromWikipedia/NightSky.jpg');
+        var yASkyboxTexture = THREE.ImageUtils.loadTexture('https://upload.wikimedia.org/wikipedia/commons/3/30/Starry_Night_at_La_Silla.jpg');
+
         yASkyboxTexture.repeat.set(1, 1);// texture repeat
         yASkyboxTexture.wrapS = THREE.RepeatWrapping;//drawing from the start
         yASkyboxTexture.wrapT = THREE.RepeatWrapping;
