@@ -1,18 +1,17 @@
 //CONSTANTS 
-var offsetXBetweenAliens = 75;
-var offsetYBetweenAliensRow = 100;
-var offsetYBetweenFirstAlienRowAndPlayer = 1000;
-var alienLeftCorner = -500;
-var numberOfAliensInARow = 14;
-var groundY = -512;
-var groundBound = 600;
-var playerMvm = 50;
+const offsetXBetweenAliens = 75;
+const offsetYBetweenAliensRow = 100;
+const offsetYBetweenFirstAlienRowAndPlayer = 1000;
+const alienLeftCorner = -500;
+const numberOfAliensInARow = 14;
+const groundY = -512;
+const groundBound = 600;
+const playerMvm = 50;
+const angle = -0.15;
+const playerY = playerMvm + groundY;
+const antiliasingValue = 16;
+
 var mv = playerMvm;
-var angle = -0.15;
-var playerY = playerMvm + groundY;
-var antiliasingValue = 16;
-
-
 var yAScene = new THREE.Scene();//new Scene initialization 
 var yACamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerWidth, 0.5, 10000);//fieldOfView,aspectRatio,near,far
 yACamera.position.y = Math.sin(angle) * 1200
