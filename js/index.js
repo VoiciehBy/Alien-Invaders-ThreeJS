@@ -130,19 +130,34 @@ function isAlienAlive(alienState) {
     else return false;
 }
 
-/*function isAllAliensDead() {
+function isAllAliensDead() {
     for (var j = 0; j < numberOfAliensInARow; j++) {
-        if ((isAlienAlive(aliens[j]) == true) ||
-            (isAlienAlive(aliens1[j]) == true) ||
-            (isAlienAlive(aliens2[j]) == true) || (isAlienAlive(aliens3[j]) == true))
+        if ((isAlienAlive(aliensStates[j])) ||
+            (isAlienAlive(aliens1States[j])) ||
+            (isAlienAlive(aliens2States[j])) || (isAlienAlive(aliens3States[j])))
             return false;
     }
     return true;
-}*/
+}
 
-function removeAlien(alien, alienState) {
+function removeAlien(alien, alienStateIndex) {
     yAScene.remove(alien);
-    aliensState = 0;
+    aliensStates[alienStateIndex] = 0;
+}
+
+function remove1Alien(alien, alienStateIndex) {
+    yAScene.remove(alien);
+    aliens1States[alienStateIndex] = 0;
+}
+
+function remove2Alien(alien, alienStateIndex) {
+    yAScene.remove(alien);
+    aliens2States[alienStateIndex] = 0;
+}
+
+function remove3Alien(alien, alienStateIndex) {
+    yAScene.remove(alien);
+    aliens3States[alienStateIndex] = 0;
 }
 
 function distanceBetweenAlienAndTheBullet(alien) {
@@ -151,17 +166,17 @@ function distanceBetweenAlienAndTheBullet(alien) {
 
 function removeAlienHitByTheBullet() {
     for (var j = 0; j < numberOfAliensInARow; j++)
-        if (isAlienAlive(aliensStates[j]) == true && distanceBetweenAlienAndTheBullet(aliens[j]) <= 30)
-            removeAlien(aliens[j], aliensStates[j]);
+        if (isAlienAlive(aliensStates[j]) && distanceBetweenAlienAndTheBullet(aliens[j]) <= 30)
+            removeAlien(aliens[j], j);
     for (var j = 0; j < numberOfAliensInARow; j++)
-        if (isAlienAlive(aliens1States[j]) == true && distanceBetweenAlienAndTheBullet(aliens1[j]) <= 30)
-            removeAlien(aliens1[j], aliens1States[j]);
+        if (isAlienAlive(aliens1States[j]) && distanceBetweenAlienAndTheBullet(aliens1[j]) <= 30)
+            remove1Alien(aliens1[j], j);
     for (var j = 0; j < numberOfAliensInARow; j++)
         if (isAlienAlive(aliens2States[j]) == true && distanceBetweenAlienAndTheBullet(aliens2[j]) <= 30)
-            removeAlien(aliens2[j], aliens2States[j]);
+            remove2Alien(aliens2[j], j);
     for (var j = 0; j < numberOfAliensInARow; j++)
-        if (isAlienAlive(aliens2States[j]) == true && distanceBetweenAlienAndTheBullet(aliens3[j]) <= 30)
-            removeAlien(aliens3[j], aliens3States[j]);
+        if (isAlienAlive(aliens3States[j]) && distanceBetweenAlienAndTheBullet(aliens3[j]) <= 30)
+            remove3Alien(aliens3[j], j);
 }
 
 function moveAliensByX(xMove) {
@@ -257,6 +272,11 @@ function resetAliens() {
         aliens1[j].position.y = player.position.y + offsetYBetweenFirstAlienRowAndPlayer + offsetYBetweenAliensRow;
         aliens2[j].position.y = player.position.y + offsetYBetweenFirstAlienRowAndPlayer + 2 * offsetYBetweenAliensRow;
         aliens3[j].position.y = player.position.y + offsetYBetweenFirstAlienRowAndPlayer + 3 * offsetYBetweenAliensRow;
+
+        aliensStates[j] = 1;
+        aliens1States[j] = 1;
+        aliens2States[j] = 1;
+        aliens3States[j] = 1;
     }
 }
 
@@ -293,12 +313,19 @@ function resetGame() {
 function update() {
     //KEYBOARD HANDLING
     yAKeyboard.update();
+
+    if (yAKeyboard.down("esc"))
+        resetGame();
+    if (yAKeyboard.down("enter"))
+        isGamePaused = !isGamePaused;
+
+    if (isGamePaused == true)
+        return;
+
     if (yAKeyboard.down("left") && player.position.x - playerMvm > -500)
         movePlayerLeft();
     if (yAKeyboard.down("right") && player.position.x + playerMvm < 500)
         movePlayerRight();
-    if (yAKeyboard.down("esc"))
-        resetGame();
     if (yAKeyboard.down("space")) {
         resetBullet();
         moveBullet();
@@ -330,12 +357,8 @@ function update() {
                 moveAliensByY(mv);
                 mv *= -1;
             }
-            if (isAlienCrossedTheLine() == true)
+            if (isAlienCrossedTheLine() || isAllAliensDead())
                 resetGame();
-            /*if (isAllAliensDead() == true)
-                isGamePaused = true;
-            if (isAllAliensDead() == false)
-                isGamePaused = false;*/
             break;
     }
     ++i;
@@ -343,7 +366,6 @@ function update() {
 
 function render() { //renderLoop (60 FPS)
     requestAnimationFrame(render);
-    if (isGamePaused == false)
-        update();
+    update();
     yARenderer.render(yAScene, yACamera);
 } render();
